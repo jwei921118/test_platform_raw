@@ -1,0 +1,572 @@
+// 重置样式
+@import './element.reset.scss';
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: $font;
+    font-size: $font-size-normal;
+}
+
+.content-box {
+    height: calc(100% - 60px);
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.clearfix:after {
+    content: '';
+    height: 0;
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.relative {
+    position: relative;
+}
+
+.strong {
+    color: $accent-color !important;
+}
+
+// 公用样式
+.h-100 {
+    height: 100%;
+    position: relative;
+}
+
+.w-100-imp {
+    width: 100% !important;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+// 宽度百分比
+.wr-50 {
+    width: 50%;
+}
+
+.wr-85 {
+    width: 85%;
+}
+
+// 宽度px
+.wp-48 {
+    width: 48px;
+}
+
+.wp-60 {
+    width: 60px;
+}
+
+.wp-80 {
+    width: 80px;
+}
+
+.wp-100 {
+    width: 100px;
+}
+
+.wp-120 {
+    width: 120px;
+}
+
+.wp-160 {
+    width: 160px;
+}
+
+.wp-180 {
+    width: 180px;
+}
+
+.wp-200 {
+    width: 200px;
+}
+
+.wp-280 {
+    width: 280px;
+}
+
+.wp-268 {
+    width: 268px;
+}
+
+.no-boxshow {
+    box-shadow: none;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+// 边框margin
+.m-l-4 {
+    margin-left: 4px;
+}
+
+.m-l-6 {
+    margin-left: 6px;
+}
+
+.m-l-8 {
+    margin-left: 8px;
+}
+
+.m-l-10 {
+    margin-left: 10px;
+}
+
+.m-r-4 {
+    margin-right: 4px;
+}
+
+.m-r-6 {
+    margin-right: 6px;
+}
+
+.m-r-8 {
+    margin-right: 6px;
+}
+
+.m-r-10 {
+    margin-right: 10px;
+}
+
+.m-r-20 {
+    margin-right: 20px;
+}
+
+.m-t-4 {
+    margin-top: 4px;
+}
+
+.m-t-6 {
+    margin-top: 6px;
+}
+
+.m-t-8 {
+    margin-top: 8px;
+}
+
+.m-t-10 {
+    margin-top: 10px;
+}
+
+.m-t-12 {
+    margin-top: 12px;
+}
+
+.m-t-14 {
+    margin-top: 14px;
+}
+
+.m-t-16 {
+    margin-top: 16px;
+}
+
+.m-t-20 {
+    margin-top: 20px;
+}
+
+.m-t-30 {
+    margin-top: 30px;
+}
+
+.m-t-34 {
+    margin-top: 34px;
+}
+
+.m-t-40 {
+    margin-top: 40px;
+}
+
+.m-b-4 {
+    margin-bottom: 4px;
+}
+
+.m-b-6 {
+    margin-bottom: 6px;
+}
+
+.m-b-8 {
+    margin-bottom: 8px;
+}
+
+.m-b-10 {
+    margin-bottom: 10px;
+}
+
+.m-b-12 {
+    margin-bottom: 12px;
+}
+
+.m-b-14 {
+    margin-bottom: 14px;
+}
+
+.m-b-16 {
+    margin-bottom: 16px;
+}
+
+.m-b-18 {
+    margin-bottom: 18px;
+}
+
+.m-b-20 {
+    margin-bottom: 20px;
+}
+
+.m-b-30 {
+    margin-bottom: 30px;
+}
+
+.m-lr-4 {
+    margin: 0 4px;
+}
+
+.m-lr-6 {
+    margin: 0 6px;
+}
+
+.m-lr-8 {
+    margin: 0 8px;
+}
+
+.m-lr-10 {
+    margin: 0 10px;
+}
+
+.m-tb-4 {
+    margin: 4px 0;
+}
+
+.m-tb-6 {
+    margin: 6px 0;
+}
+
+.m-tb-8 {
+    margin: 8px 0;
+}
+
+.m-tb-10 {
+    margin: 10px 0;
+}
+
+.m-tb-20 {
+    margin: 20px 0;
+}
+
+//内边框 padding
+// 左右
+.common-padding {
+    padding: 10px 20px;
+}
+
+.p-lr-4 {
+    padding: 0 4px;
+}
+
+.p-lr-6 {
+    padding: 0 6px;
+}
+
+.p-lr-8 {
+    padding: 0 8px;
+}
+
+.p-lr-10 {
+    padding: 0 10px;
+}
+
+.p-lr-20 {
+    padding: 0 20px;
+}
+
+// 上下
+.p-tm-4 {
+    padding: 4px 0;
+}
+
+.p-tm-6 {
+    padding: 6px 0;
+}
+
+.p-tm-8 {
+    padding: 8px 0;
+}
+
+.p-tm-10 {
+    padding: 10px 0;
+}
+
+// 左边
+.p-l-4 {
+    padding-left: 4px;
+}
+
+.p-l-6 {
+    padding-left: 6px;
+}
+
+.p-l-8 {
+    padding-left: 8px;
+}
+
+.p-l-10 {
+    padding-left: 10px;
+}
+
+// 右边
+.p-r-4 {
+    padding-right: 4px;
+}
+
+.p-r-6 {
+    padding-right: 6px;
+}
+
+.p-r-8 {
+    padding-right: 8px;
+}
+
+.p-r-10 {
+    padding-right: 10px;
+}
+
+// vertical
+.vertical-m {
+    vertical-align: middle;
+}
+
+.content-box {
+    box-sizing: content-box;
+}
+
+.border-box {
+    box-sizing: border-box;
+}
+
+// 提示
+.tip-text {
+    color: $info-text;
+    font-size: $font-size-small;
+}
+
+.error-text {
+    color: $error-color;
+    font-size: $font-size-small;
+}
+
+.light-text {
+    color: $fc;
+}
+
+// 颜色
+.main-color-text {
+    color: $main-color;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+.main-bg-text {
+    background-color: $main-color;
+}
+
+.accent-color-text {
+    color: $accent-color;
+}
+
+.sub-text {
+    color: $sub-text;
+}
+
+// 文字对齐方式
+.align-left {
+    text-align: left;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-right {
+    text-align: right;
+}
+
+// curer
+.cursor-p {
+    cursor: pointer;
+}
+
+// 颜色
+.main-color {
+    color: $main-color;
+}
+
+.light-text {
+    color: $fc;
+}
+
+.title-text {
+    color: $title-text;
+}
+
+.main-text {
+    color: $main-text;
+}
+
+.sub-text {
+    color: $sub-text;
+}
+
+.info-text {
+    color: $info-text;
+}
+
+.succeed-text {
+    color: $succeed-color;
+}
+
+.error-text {
+    color: $error-color;
+}
+
+.warning-text {
+    color: $warning-color;
+}
+
+// 字体
+.font--size-big {
+    font-size: $font-size-big;
+}
+
+.font--size-normal {
+    font-size: $font-size-normal;
+}
+
+.font--size-small {
+    font-size: $font-size-small;
+}
+
+.font-size-18 {
+    font-size: 18px;
+}
+
+.font-size-20 {
+    font-size: 20px;
+}
+
+.font-size-22 {
+    font-size: 22px;
+}
+
+.font-size-24 {
+    font-size: 24px;
+}
+
+.font-size-28 {
+    font-size: 28px;
+}
+
+.font-size-30 {
+    font-size: 30px;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+// 边框
+.border-right {
+    border-right: 1px solid $border-color;
+}
+
+.border-bottom {
+    border-bottom: 1px solid $border-color;
+}
+
+// 文字
+.text-decoration-none {
+    text-decoration-line: none;
+}
+
+.en-text {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+
+// 
+.block {
+    display: block;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.text-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+// 定位
+.p-abs-bottom {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+}
+
+.p-abs-left {
+    position: absolute;
+    left: 101%;
+    top: 0;
+}
+
+.hover-main-color {
+    &:hover {
+        color: $main-color;
+    }
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+
+/*滚动条*/
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $sub-gray;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+}

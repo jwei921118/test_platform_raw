@@ -1,0 +1,233 @@
+// element 的重置样式
+// 输入框只有下边框
+.input-border-bottom {
+    .el-input__inner {
+        border: 0;
+        border-bottom: 1px solid #DCDFE6;
+        border-radius: 0;
+
+        &:focus {
+            border-color: $main-color;
+        }
+    }
+}
+
+.tab-no-border {
+    .el-tabs__nav-wrap::after {
+        background-color: transparent;
+    }
+}
+
+.reset-el-page-header {
+    .el-page-header__left {
+        color: $main-color;
+        margin-right: 20px;
+
+        &::after {
+            right: -10px;
+            top: 25%;
+            transform: rotateZ(20deg);
+            -webkit-transform: rotateZ(20deg);
+        }
+    }
+
+    .el-page-header__content {
+        font-size: 14px;
+    }
+}
+
+// 重置step
+.reset-el-step {
+    .el-step__description {
+        &.is-finish {
+            color: $main-text;
+        }
+
+        &.is-success {
+            color: $main-text;
+        }
+    }
+
+    .el-step.is-vertical .el-step__head {
+        width: 32px;
+    }
+
+    .el-step.is-vertical .el-step__line {
+        left: 16px;
+    }
+
+    .el-step__icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .el-step__title {
+        font-weight: 550;
+
+        &.is-success {
+            color: $main-color;
+        }
+
+        &.is-wait {
+            color: $main-text;
+        }
+    }
+
+    .el-step__head {
+        &.is-success {
+            color: $main-color;
+            border-color: $main-color;
+        }
+    }
+}
+
+// 重置复合输入框
+.reset-el-complex-input {
+
+    .el-input-group__append,
+    .el-input-group__prepend {
+        padding: 0 10px;
+    }
+
+    .el-input__inner {
+        padding: 0 8px;
+    }
+}
+
+.reset-layer {
+    .el-dialog__header {
+        padding: 30px 20px 10px;
+    }
+
+    .el-dialog__headerbtn {
+        font-size: 20px;
+        top: 24px;
+    }
+
+    .el-dialog__body {
+        padding: 20px 50px;
+    }
+}
+
+// .el-button {
+//     // &.el-button--primary {
+//     //     box-shadow: 0px 6px 8px 0px rgba(27, 160, 248, 0.19);
+//     // }
+
+//     // &.is-plain {
+//     //     box-shadow: none;
+//     // }
+// }
+
+// el-card 
+.reset-el-card {
+    .el-card__body {
+        padding: 30px;
+    }
+}
+
+.reset-form-label-nopadding {
+    &.el-form--label-top {
+        .el-form-item__label {
+            padding: 0;
+        }
+    }
+}
+
+// 重置upload picture
+.reset-el-upload-picture {
+    // width: 225px;
+    // height: 148px;
+    display: inline-block;
+
+    .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        width: 225px;
+        height: 148px;
+        background-color: #fbfdff;
+    }
+
+    .el-upload:hover {
+        border-color: #409EFF;
+    }
+
+    .el-upload--text {
+        font-size: 28px;
+        color: #8c939d;
+        line-height: 148px;
+        text-align: center;
+    }
+
+    img {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+// 重置上传图片列表宽度
+.reset-el-upload-list-pic-width {
+    display: inline-block;
+
+    .el-upload-list--picture-card {
+        .el-upload-list__item {
+            width: 225px;
+        }
+    }
+
+    .el-upload--picture-card {
+        width: 225px;
+    }
+}
+
+// 影藏最后一个
+.hide-el-upload-list-pic-last {
+    .el-upload--picture-card {
+        display: none;
+    }
+}
+
+// 重置 checkbox 
+.reset-el-checkbox {
+    .el-checkbox__input {
+        float: right;
+        margin-top: 2px;
+    }
+}
+
+// 重置dot
+.reset-dot-ps {
+    .el-badge__content {
+        &.is-dot {
+            top: 6px;
+        }
+    }
+}
+
+.el-loading-mask {
+    &.is-fullscreen {
+        .el-loading-spinner {
+            margin-top: -90px;
+        }
+    }
+}
+
+.reset-tab {
+    .el-tabs__header {
+        margin: 0;
+    }
+
+    >.el-tabs__content {
+        border: 1px solid #E4E7ED;
+        border-top: 0;
+        padding: 20px;
+    }
+
+    >.el-tabs__content {
+        height: 640px;
+        overflow-y: auto;
+    }
+}

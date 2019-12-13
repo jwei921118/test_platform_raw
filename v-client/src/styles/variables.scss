@@ -1,0 +1,43 @@
+// scss 基础变量
+// 停车场基础配置样式
+
+$view-to-src-path: '../../../';
+$font:'Microsoft YaHei',
+'PingFang SC',
+Arial,
+sans-serif; // 默认字体集
+$font-size-big: 36px; // 大号字体
+$font-size-normal: 14px; // 正常字体
+$font-size-small:12px; // 小号字体
+
+$fc: #FFFFFF; // 常用颜色
+$bg-color: #F5F5F5; // 内页全局背景颜色
+$main-color: #409EFF; // 主色调
+$sub-color: #dcdcdc; // 辅色调
+$accent-color:#F1561D; // 强调色
+$accent-bg-color: #FFFAF8; // 强调背景色
+$main-gray: #FAFAFA; // 主要灰色
+$sub-gray: #F0F0F0; // 次要灰色
+$accent-text: #000000; // 强调标题颜色
+$title-text: #333333; // 标题文本颜色
+$main-text: #666666; // 主文本颜色
+$sub-text: #9B9B9B; // 副文本颜色
+$info-text: #aaaaaa; // 信息文本颜色
+$placehoder-text: #A0A0A3; // 文本框提示文案颜色
+$link-color: #4A90E2; // 链接颜色
+$footer-color: #84848E; // 页脚颜色
+
+$border-color: #DDDDDD; // 边框颜色
+$border-color-2: #EEEEEE; // 边框颜色
+$active-border-color: #666666; // 激活边框颜色
+
+$succeed-color: #AADA13; // 成功颜色
+$warning-color: #FFBA00; // 警告颜色
+$error-color: #F1561D; // 错误颜色
+$status-process: #F5A623; // 状态进行中
+$status-finish: #CCCCCC; // 状态已完成
+
+$big-space:40px; // 大内边距
+$normal-space:30px; // 正常边距
+$small-space:20px; // 小边距
+$little-space:10px; // 最小边距
