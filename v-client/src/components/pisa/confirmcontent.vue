@@ -81,6 +81,7 @@ export default {
 			})
 		},
 		selectCaller(v) {
+			console.log(v);
 			this.caller = v
 		},
 		// 调用方法

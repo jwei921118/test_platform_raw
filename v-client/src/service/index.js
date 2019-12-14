@@ -2,7 +2,7 @@
  * @Author: fergus
  * @Date: 2019-09-05 14:41:31
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-12-12 20:41:49
+ * @Last Modified time: 2019-12-14 12:43:37
  */
 
 import serviceBase from './serviceBase';
@@ -26,6 +26,8 @@ const URLS = {
     delCntBytecode: `${urlLoaction}/contract/bytecode/delete`,
     // 部署合约
     deployCnt: `${urlLoaction}/contract/bytecode/deploy`,
+    // 已经部署合约列表
+    deployedCntList: `${urlLoaction}/contract/deploy/list`,
     // sdr 合约列表
     sdrCntList: `${urlLoaction}/contract/sdrcnt/list`,
     // 执行sdr 合约

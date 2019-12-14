@@ -19,17 +19,7 @@ module.exports = app => {
   // 部署合约
   router.post('/contract/bytecode/deploy', controller.contract.deployCnt);
   // 获取合约部署列表
-  router.get('/contract/deploy/list', controller.contract.deployedCntList);
-
-  // pisa 合约
-  router.get('/contract/pisacnt/list', controller.pisaContract.list);
-  router.post('/contract/pisacnt/addpartner', controller.pisaContract.addPartner);
-
-  // sdr 合约
-  router.get('/contract/sdrcnt/list', controller.sdrContract.list);
-
-  // confirm 对账合约
-  router.get('/contract/confirmcnt/list', controller.confirmContract.list);
+  router.post('/contract/deploy/list', controller.contract.deployedCntList);
 
   // 删除部署的合约
   router.post('/contract/deploy/delete', controller.contract.delDeployCntFromDB);

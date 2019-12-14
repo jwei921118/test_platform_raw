@@ -58,6 +58,7 @@ export default {
 	mounted() {
 		// 添加获取执行合约方法返回参数
 		this._event.on('sdr', data => {
+			console.log(this.caller)
 			if (this.caller) {
 				this.handleFn(data, this.caller)
 			} else {

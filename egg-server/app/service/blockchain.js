@@ -111,7 +111,16 @@ class BlockChainService extends Service {
    * @memberof BlockChainService
    */
   createAccount(accountName) {
-    const chain = this.initChain();
+    let {
+      app
+    } = this;
+    let chain = null;
+    if (!app.chainInstance) {
+      app.chainInstance = this.initChain();
+    }
+    chain = app.chainInstance;
+    // const chain = this.initChain();
+
     const newKey = Chain.utils.generateECKey();
 
     // 合约账户名称
@@ -166,6 +175,7 @@ class BlockChainService extends Service {
    * @memberof BlockChainService
    */
   queryAccount(name) {
+
     const chain = this.initChain();
     return new Promise((resolve, reject) => {
       chain.ctr.QueryAccount({
@@ -194,16 +204,22 @@ class BlockChainService extends Service {
    * @memberof BlockChainService
    */
   async deployContract(data, cntParam) {
+    let {
+      app
+    } = this;
+    let chain = null;
     let arr = [];
     if (cntParam) {
       arr = cntParam.split(',');
     }
-
     if (arr[1]) {
       arr[1] = parseInt(arr[1]);
     }
-
-    let chain = await this.getChain(data.privateKey, data.publicKey);
+    if (!app.chainInstance) {
+      app.chainInstance = await this.getChain(data.privateKey, data.publicKey);
+    }
+    this.setUser(app.chainInstance, data.privateKey, data.publicKey);
+    chain = app.chainInstance;
     if (!chain) {
       return {
         code: 1,
@@ -231,6 +247,8 @@ class BlockChainService extends Service {
               message: '部署合约成功'
             });
           }
+          // 销毁引用
+          chain = null;
         }
       );
     });
@@ -244,11 +262,39 @@ class BlockChainService extends Service {
    * @memberof BlockChainService
    */
   async getContractInstance(data) {
-    // console.log(data);
-    const chain = await this.getChain(data.privateKey, data.publicKey);
+    let {
+      app
+    } = this;
+    let chain = null;
+    console.log(app.chainInstance);
+    if (!app.chainInstance) {
+      app.chainInstance = await this.getChain(data.privateKey, data.publicKey);
+    }
+    this.setUser(app.chainInstance, data.privateKey, data.publicKey);
+    chain = app.chainInstance;
     let abi = JSON.parse(data.abi);
     const theContract = chain.ctr.contract(data.contractName, abi);
     return theContract;
+  }
+
+
+
+  /**
+   *
+   * 设置用户调用者
+   * @param {*} chain
+   * @param {*} privateKey
+   * @param {*} publicKey
+   * @memberof BlockChainService
+   */
+  setUser(chain, privateKey, publicKey) {
+    let opt = {};
+    opt.userPrivateKey = privateKey;
+    opt.userPublicKey = publicKey;
+    opt.userRecoverPrivateKey = privateKey;
+    opt.userRecoverPublicKey = publicKey;
+    chain.setUserKey(opt);
+    chain.setUserRecoverKey(opt);
   }
   /**
    *

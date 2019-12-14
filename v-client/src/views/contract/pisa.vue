@@ -116,24 +116,28 @@ export default {
 	},
 	mounted() {
 		this.editableTabsValue = ''
-		this.getCntList('sdrCntList')
-		this.getCntList('pisaCntList')
-		this.getCntList('confirmCntList')
+		this.getCntList('sdr')
+		this.getCntList('pisa')
+		this.getCntList('confirmOrder')
 	},
 	methods: {
 		// 获取稳定币合约列表
 		getCntList(type) {
-			this._services.ajaxGet(type).then(res => {
-				if (res.code === 0) {
-					if (type === 'sdrCntList') {
-						this.sdrCntList = res.data
-					} else if (type === 'pisaCntList') {
-						this.pisaCntList = res.data
-					} else if (type === 'confirmCntList') {
-						this.confirmCntList = res.data
+			this._services
+				.ajaxPost('deployedCntList', {
+					contractType: type
+				})
+				.then(res => {
+					if (res.code === 0) {
+						if (type === 'sdr') {
+							this.sdrCntList = res.data
+						} else if (type === 'pisa') {
+							this.pisaCntList = res.data
+						} else if (type === 'confirmOrder') {
+							this.confirmCntList = res.data
+						}
 					}
-				}
-			})
+				})
 		},
 		// 添加到测试
 		addToTest(data) {

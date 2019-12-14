@@ -107,7 +107,6 @@ class ContractController extends Controller {
             service
         } = this;
         let data = ctx.request.body;
-        console.log(data);
         if (!data.id) {
             ctx.return({
                 code: 1,
@@ -149,12 +148,28 @@ class ContractController extends Controller {
     async deployedCntList() {
         const {
             ctx,
-            service
+            service,
+            app
         } = this;
-
+        let {
+            validator
+        } = app;
         let data = ctx.request.body;
-        const result = await service.contract.deployedCntList(data);
-        ctx.return(result);
+
+        const errors = validator.validate({
+            contractType: 'string',
+        }, data)
+        if (errors) {
+            // 验证失败
+            ctx.return({
+                code: ctx.VALIDATE_ERROR,
+                message: '参数验证失败'
+            })
+        } else {
+            const result = await service.contract.deployedCntList(data);
+            ctx.return(result);
+        }
+
     }
 
 

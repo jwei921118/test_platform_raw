@@ -285,13 +285,20 @@ class ContractService extends Service {
         let {
             ctx
         } = this;
-
+        let result = null
         try {
-            const result = await ctx.model.CntDeploy.findAll({
-                where: {
-                    contractType: data.contractType
+            if (data.contractType === 'sdr') {
+                result = await ctx.model.SdrCnt.findAll();
+            } else if (data.contractType === 'pisa') {
+                result = await ctx.model.PisaCnt.findAll();
+            } else if (data.contractType === 'confirmOrder') {
+                result = await ctx.model.ConfirmCnt.findAll();
+            } else {
+                return {
+                    code: 1,
+                    message: '参数contractType错误'
                 }
-            });
+            }
             return {
                 code: 0,
                 data: result
