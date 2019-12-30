@@ -38,7 +38,7 @@ class UserService extends Service {
             let res = {};
             if (created) {
                 res.code = 0;
-                res.data = user.dataValues;
+                res.data = user;
             } else {
                 res.code = ctx.DB_DATA_REPEAT;
                 res.message = '用户已存在';
@@ -64,7 +64,7 @@ class UserService extends Service {
             if (result && result instanceof Array) {
                 return {
                     code: 0,
-                    data: result.map((v) => v.dataValues)
+                    data: result
                 }
             }
         } catch (error) {
@@ -100,6 +100,39 @@ class UserService extends Service {
                     code: 1,
                     message: '不存在本条数据'
                 }
+            }
+        } catch (error) {
+            return ctx.helper.DB_ERROR;
+        }
+    }
+
+
+
+    /**
+     *
+     * 查询一个
+     * @param {*} data
+     * @memberof UserService
+     */
+    async findOne(data) {
+        let {
+            ctx
+        } = this;
+        let param = {};
+        if (data.identity) {
+            param.identity = data.identity
+        }
+        if (data.accountName) {
+            param.accountName = data.accountName;
+        }
+
+        try {
+            const result = await ctx.model.User.findOne({
+                where: param
+            })
+            return {
+                code: 0,
+                data: result.dataValues
             }
         } catch (error) {
             return ctx.helper.DB_ERROR;

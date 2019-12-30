@@ -59,8 +59,8 @@ export default {
 						methodName: this.data.value,
 						param: this.formData
 					}
-					console.log(this.contractType)
-					this._event.emit(this.contractType, param)
+					// this._event.emit(this.contractType, param)
+					this.$emit('execute', param)
 				}
 			})
 		}

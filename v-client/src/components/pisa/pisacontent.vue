@@ -19,29 +19,59 @@
 				</el-select>
 			</div>
 			<div v-for="(item,inx) in methodsArr" :key="inx">
-				<apiItem contractType="pisa" :data="item.data" :param="item.param" :rules="item.rules"></apiItem>
+				<apiItem
+					@execute="execute"
+					contractType="pisa"
+					:data="item.data"
+					:param="item.param"
+					:rules="item.rules"
+				></apiItem>
 			</div>
 		</el-col>
 		<el-col :span="8" class="border-r h-100">
 			<outputCtx ref="outputCtx"></outputCtx>
 		</el-col>
-		<el-col :span="10"></el-col>
+		<el-col :span="10" class="h-100 overflow-y-auto">
+			<tableBase :tableKey="merchantPartnerKey" :tableData="merchantPartnerData"></tableBase>
+		</el-col>
 	</el-row>
 </template>
 <script>
 import apiItem from '../commom/apiItem'
 import outputCtx from '../commom/output.vue'
 import { pisaMethodsArr } from './config.data'
+import tableBase from '../base/tableBase'
 export default {
 	components: {
 		apiItem,
-		outputCtx
+		outputCtx,
+		tableBase
 	},
 	data() {
 		return {
 			methodsArr: pisaMethodsArr,
 			// 合约调用者
 			caller: '',
+			merchantPartnerKey: [
+				{
+					key: 'accountName',
+					name: '用户名',
+					width: '160px'
+				},
+				{
+					key: 'identity',
+					name: '用户地址'
+				},
+				{
+					key: 'balanceof',
+					name: '账户余额'
+				},
+				{
+					key: 'updatedAt',
+					name: '更新时间'
+				}
+			],
+			merchantPartnerData: [],
 			// 合约调用者选项
 			userOptions: []
 		}
@@ -55,16 +85,8 @@ export default {
 		}
 	},
 	mounted() {
-		// 添加获取执行合约方法返回参数
-		this._event.on('pisa', data => {
-			console.log(this.caller)
-			if (this.caller) {
-				this.handleFn(data, this.caller)
-			} else {
-				this.tools.message('请先选择调用者')
-			}
-		})
 		this.getUser()
+		this.getMerchantPartner()
 	},
 	methods: {
 		// 获取用户信息
@@ -81,17 +103,42 @@ export default {
 				}
 			})
 		},
+		// 获取sdr合伙人信息
+		getMerchantPartner() {
+			this._services
+				.ajaxPost('merchantPartnerList', {
+					merchantId: this.cntInfo.id
+				})
+				.then(res => {
+					if (res.code === 0) {
+						this.merchantPartnerData = res.data
+					} else {
+						this.tools.message('请选择调用者')
+					}
+				})
+		},
 		selectCaller(v) {
 			this.caller = v
 		},
+		execute(data) {
+			console.log(this.caller)
+			if (this.caller) {
+				this.handleFn(data, this.caller)
+			} else {
+				this.tools.message('请选择调用者')
+			}
+		},
 		// 调用方法
 		handleFn(methodInfo, accountName) {
-			let { contractName, abi } = this.cntInfo
+			let { contractName, abi, id, contractType } = this.cntInfo
+			console.log('pisa', '-----------', contractName)
 			const param = {
 				...methodInfo,
 				contractName,
 				abi,
-				accountName
+				accountName,
+				id,
+				contractType
 			}
 			this._services.ajaxPost('executecnt', param, { loading: true }).then(res => {
 				let data = null
@@ -100,6 +147,7 @@ export default {
 				} else {
 					data = res.message
 				}
+				this.getMerchantPartner()
 				this.$refs.outputCtx.input(data, res.code)
 			})
 		}

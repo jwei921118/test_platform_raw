@@ -15,6 +15,9 @@ module.exports = app => {
         identity: {
             type: STRING
         },
+        projectId: {
+            type: INTEGER
+        },
         // sdr 数量
         balanceof: {
             type: INTEGER
@@ -28,7 +31,8 @@ module.exports = app => {
     });
     ProPartner.associate = function () {
         app.model.ProPartner.belongsTo(app.model.SdrCnt, {
-            foreignKey: 'project_id'
+            foreignKey: 'projectId',
+            targetKey: 'id'
         })
     }
     return ProPartner;

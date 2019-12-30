@@ -50,5 +50,23 @@ module.exports = app => {
         timestamps: false
     });
 
+    SdrCnt.associate = function () {
+        app.model.SdrCnt.hasMany(app.model.ProPartner, {
+            foreignKey: 'projectId',
+            targetKey: 'id'
+        })
+        app.model.SdrCnt.hasMany(app.model.PisaCnt, {
+            foreignKey: 'pisaId',
+            targetKey: 'id'
+        })
+    }
+
+    // SdrCnt.associate = function () {
+    //     app.model.PisaCnt.hasMany(app.model.ProPartner, {
+    //         foreignKey: 'projectId',
+    //         targetKey: 'id'
+    //     })
+    // }
+
     return SdrCnt;
 }

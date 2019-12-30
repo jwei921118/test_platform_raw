@@ -151,7 +151,12 @@ class BlockChainService extends Service {
                     status: false
                   });
                 } else {
+                  console.log(user)
                   let identity = user.data.identity;
+                  if (identity === '0x0000000000000000000000000000000000000000000000000000000000000000') {
+                    console.log(identity)
+                    identity = this.getHashIdentity(newAccountName)
+                  }
                   // let result = Chain.utils.get
                   resolve({
                     status: true,
@@ -212,8 +217,14 @@ class BlockChainService extends Service {
     if (cntParam) {
       arr = cntParam.split(',');
     }
-    if (arr[1]) {
-      arr[1] = parseInt(arr[1]);
+    if (arr[2]) {
+      arr[2] = parseInt(arr[2]);
+    }
+    if (arr[3]) {
+      arr[3] = parseInt(arr[3]);
+    }
+    if (arr[4]) {
+      arr[4] = parseInt(arr[4]);
     }
     if (!app.chainInstance) {
       app.chainInstance = await this.getChain(data.privateKey, data.publicKey);
@@ -266,7 +277,6 @@ class BlockChainService extends Service {
       app
     } = this;
     let chain = null;
-    console.log(app.chainInstance);
     if (!app.chainInstance) {
       app.chainInstance = await this.getChain(data.privateKey, data.publicKey);
     }

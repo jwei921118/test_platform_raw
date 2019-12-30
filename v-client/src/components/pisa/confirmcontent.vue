@@ -19,7 +19,13 @@
 				</el-select>
 			</div>
 			<div v-for="(item,inx) in methodsArr" :key="inx">
-				<apiItem contractType="confirmOrder" :data="item.data" :param="item.param" :rules="item.rules"></apiItem>
+				<apiItem
+					@execute="execute"
+					contractType="confirmOrder"
+					:data="item.data"
+					:param="item.param"
+					:rules="item.rules"
+				></apiItem>
 			</div>
 		</el-col>
 		<el-col :span="18" class="border-r h-100">
@@ -54,15 +60,6 @@ export default {
 		}
 	},
 	mounted() {
-		// 添加获取执行合约方法返回参数
-		this._event.on('confirmOrder', data => {
-			console.log(111)
-			if (this.caller) {
-				this.handleFn(data, this.caller)
-			} else {
-				this.tools.message('请先选择调用者')
-			}
-		})
 		this.getUser()
 	},
 	methods: {
@@ -81,17 +78,26 @@ export default {
 			})
 		},
 		selectCaller(v) {
-			console.log(v);
 			this.caller = v
+		},
+		execute(data) {
+			if (this.caller) {
+				this.handleFn(data, this.caller)
+			} else {
+				this.tools.message('请选择调用者')
+			}
 		},
 		// 调用方法
 		handleFn(methodInfo, accountName) {
-			let { contractName, abi } = this.cntInfo
+			let { contractName, abi, id, contractType } = this.cntInfo
+			console.log('confirmOrder', '-----------', contractName)
 			const param = {
 				...methodInfo,
 				contractName,
 				abi,
-				accountName
+				accountName,
+				id,
+				contractType
 			}
 			this._services.ajaxPost('executecnt', param, { loading: true }).then(res => {
 				let data = null

@@ -1,41 +1,39 @@
 <template>
 	<div>
 		<!--  -->
-		<el-row :gutter="20">
-			<el-col :span="8">
+		<el-row :gutter="20" class="h-100">
+			<el-col :span="8" class="h-100 overflow-y-auto">
 				<div class="title">稳定币合约</div>
 				<tableBase :tableKey="tableKey" :tableData="sdrCntList"></tableBase>
-			</el-col>
-			<el-col :span="8">
 				<div class="title">PISA商户合约</div>
 				<tableBase :tableKey="tableKey" :tableData="pisaCntList"></tableBase>
-			</el-col>
-			<el-col :span="8">
 				<div class="title">对账合约</div>
 				<tableBase :tableKey="tableKey" :tableData="confirmCntList"></tableBase>
 			</el-col>
+			<el-col :span="16">
+				<el-tabs
+					class="m-t-20"
+					:class="{'reset-tab': editableTabsValue}"
+					v-model="editableTabsValue"
+					type="card"
+					closable
+					@tab-remove="removeTab"
+					@tab-click="clickTab"
+				>
+					<el-tab-pane
+						class="h-100"
+						v-for="item in editableTabs"
+						:key="item.name"
+						:label="item.title"
+						:name="item.name"
+					>
+						<keep-alive>
+							<component :cntInfo="cntInfo" v-bind:is="currentTabComponent"></component>
+						</keep-alive>
+					</el-tab-pane>
+				</el-tabs>
+			</el-col>
 		</el-row>
-		<el-tabs
-			class="m-t-20"
-			:class="{'reset-tab': editableTabsValue}"
-			v-model="editableTabsValue"
-			type="card"
-			closable
-			@tab-remove="removeTab"
-			@tab-click="clickTab"
-		>
-			<el-tab-pane
-				class="h-100"
-				v-for="item in editableTabs"
-				:key="item.name"
-				:label="item.title"
-				:name="item.name"
-			>
-				<keep-alive>
-					<component :cntInfo="cntInfo" v-bind:is="currentTabComponent"></component>
-				</keep-alive>
-			</el-tab-pane>
-		</el-tabs>
 	</div>
 </template>
 
@@ -146,7 +144,8 @@ export default {
 				this.editableTabs.push({
 					title: data.contractName,
 					name: data.contractName,
-					contractType: data.contractType
+					contractType: data.contractType,
+					cntInfo: data
 				})
 			}
 			this.editableTabsValue = data.contractName
@@ -171,6 +170,8 @@ export default {
 			} else if (contractType === 'confirmOrder') {
 				this.currentTabComponent = confirmcontent
 			}
+			let cntInfo = this.editableTabs.filter(v => v.name == name)[0].cntInfo
+			this.cntInfo = Object.assign({}, cntInfo)
 		},
 		// 清除tab
 		removeTab(targetName) {

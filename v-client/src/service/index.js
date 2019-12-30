@@ -2,7 +2,7 @@
  * @Author: fergus
  * @Date: 2019-09-05 14:41:31
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-12-14 12:43:37
+ * @Last Modified time: 2019-12-18 16:23:25
  */
 
 import serviceBase from './serviceBase';
@@ -34,6 +34,10 @@ const URLS = {
     executecnt: `${urlLoaction}/contract/execute`,
     // pisa 商户合约列表
     pisaCntList: `${urlLoaction}/contract/pisacnt/list`,
+    // 获取一个产品合伙人
+    proPartnerList: `${urlLoaction}/contract/propartner/list`,
+    // 商户合伙人列表
+    merchantPartnerList: `${urlLoaction}/contract/merchantpartner/list`,
     // 对账合约列表
     confirmCntList: `${urlLoaction}/contract/confirmcnt/list`,
     // 删除已经部署合约

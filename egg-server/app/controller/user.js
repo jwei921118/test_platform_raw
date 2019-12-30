@@ -52,6 +52,33 @@ class UserController extends Controller {
         const result = await service.user.delUser(data);
         ctx.return(result);
     }
+
+
+
+    /**
+     *
+     * 查询方案
+     * @memberof UserController
+     */
+    async search() {
+        let {
+            ctx,
+            service,
+        } = this;
+        let data = ctx.request.body;
+
+        if (!data.accountName && !data.identity) {
+            ctx.return({
+                code: 1,
+                message: '参数验证失败'
+            });
+            return;
+        }
+
+        const result = await service.user.findOne(data);
+        ctx.return(result);
+
+    }
 }
 
 module.exports = UserController;

@@ -40,6 +40,9 @@ module.exports = app => {
         totalSupply: {
             type: INTEGER
         },
+        costRatio: {
+            type: INTEGER
+        },
         createdAt: DATE,
         updatedAt: DATE
     }, {
@@ -51,6 +54,11 @@ module.exports = app => {
     PisaCnt.associate = function () {
         app.model.PisaCnt.hasMany(app.model.MerchantPartner, {
             foreignKey: 'merchantId',
+            targetKey: 'id'
+        })
+        app.model.PisaCnt.belongsTo(app.model.SdrCnt, {
+            foreignKey: 'pisaId',
+            targetKey: 'id'
         })
     }
 

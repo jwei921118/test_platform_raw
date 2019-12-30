@@ -26,12 +26,10 @@ const confirmContract = require('./tables/confirm_contract');
 
 
 // merchantPartner.belongsTo(pisaContract, {
-//     foreignKey: 'merchantId'
+//     foreignKey: 'merchant_id'
 // })
 
-// merchantPartner.sync({
-//     force: true
-// });
+// merchantPartner.sync();
 
 // pisaContract.sync();
 
@@ -45,4 +43,4 @@ const confirmContract = require('./tables/confirm_contract');
 
 // sdrContract.sync();
 
-confirmContract.sync();
+// confirmContract.sync();

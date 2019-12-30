@@ -30,7 +30,8 @@ module.exports = appInfo => {
     port: 3306,
     database: 'contract',
     username: 'root',
-    password: 'Gzcd2015'
+    password: 'Gzcd2015',
+    timezone: '+08:00'
   };
 
 

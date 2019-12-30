@@ -175,7 +175,7 @@ class ContractController extends Controller {
 
     /**
      *
-     *  
+     *  执行合约方法 
      * @memberof sdrContractController
      */
     async execute() {
@@ -192,17 +192,82 @@ class ContractController extends Controller {
             contractName: 'string',
             accountName: 'string',
             methodName: 'string',
-            abi: 'string'
+            abi: 'string',
+            contractType: 'string'
         }, data);
         if (errors) {
             ctx.return({
                 code: ctx.VALIDATE_ERROR,
-                message: '参数验证失败'
+                message: errors
             })
+        } else {
+            const result = await service.contract.execute(data);
+            ctx.return(result);
         }
-        const result = await service.contract.execute(data);
+
+    }
+
+
+    /**
+     *
+     * 获取sdr 合伙人
+     * @memberof ContractController
+     */
+    async getProPartner() {
+        const {
+            ctx,
+            service
+        } = this;
+
+        let data = ctx.request.body;
+
+        const result = await service.propartner.list(data);
+        ctx.return(result);
+
+    }
+
+
+    /**
+     *
+     * 获取商户合伙人
+     * @memberof ContractController
+     */
+    async getMerchantPartner() {
+        const {
+            ctx,
+            service
+        } = this;
+
+        let data = ctx.request.body;
+
+        const result = await service.merchantpartner.list(data);
         ctx.return(result);
     }
+
+
+    /**
+     * 创建sdr 合伙人
+     *
+     * @memberof ContractController
+     */
+    async createProPartner() {
+        let {
+            ctx,
+            service
+        } = this;
+
+        let data = ctx.request.body;
+
+
+        data.balanceof = Number(data.balanceof);
+        data.projectId = Number(data.projectId);
+        console.log(data);
+        const result = await service.propartner.createOrUpdate(data);
+        ctx.return(result);
+
+    }
+
+
 
 
 

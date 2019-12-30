@@ -182,28 +182,101 @@ const pisaMethodsArr = [{
         },
         param: Object.assign([], param2),
         rules: Object.assign({}, rules2)
-    }, {
+    },
+    {
+        data: {
+            name: '查询合伙人权益',
+            value: 'balanceOf'
+        },
+        param: Object.assign([], param1),
+        rules: Object.assign({}, rules1)
+    },
+    {
+        data: {
+            name: '商户成本值',
+            value: 'cost'
+        },
+        param: [],
+        rules: {}
+    },
+    {
+        data: {
+            name: '冻结商户成本值',
+            value: 'freezeCost'
+        },
+        param: [],
+        rules: {}
+    },
+    {
+        data: {
+            name: '成本比例',
+            value: 'costRatio'
+        },
+        param: [],
+        rules: {}
+    },
+    {
+        data: {
+            name: '固定成本',
+            value: 'costFixed'
+        },
+        param: [],
+        rules: {}
+    },
+    {
+        data: {
+            name: '按照固定成本清分',
+            value: 'clearBycostFixed'
+        },
+        param: [account, {
+            key: 'month',
+            label: '月份',
+            type: 'text'
+        }],
+        rules: {
+            ...account_rule,
+            month: [{
+                required: true,
+                message: '请输入月份',
+                trigger: ['blur', 'change']
+            }]
+        }
+    },
+    {
+        data: {
+            name: '按照比例清分',
+            value: 'clearBycostRatio'
+        },
+        param: [account],
+        rules: {
+            ...account_rule
+        }
+    },
+    {
         data: {
             name: '转账',
             value: 'transfer'
         },
         param: Object.assign([], param3),
         rules: Object.assign({}, rules3)
-    }, {
+    },
+    {
         data: {
             name: '使用支票',
             value: 'transferFrom'
         },
         param: Object.assign([], param3),
         rules: Object.assign({}, rules3)
-    }, {
+    },
+    {
         data: {
-            name: '查看他人支票数量',
-            value: 'allowance'
+            name: '切换管理员',
+            value: 'changeOwner'
         },
         param: Object.assign([], param1),
         rules: Object.assign({}, rules1)
-    }, {
+    },
+    {
         data: {
             name: '查看他人支票数量',
             value: 'allowance'
@@ -218,26 +291,6 @@ const pisaMethodsArr = [{
         },
         param: Object.assign([], param1),
         rules: Object.assign({}, rules1)
-    },
-    {
-        data: {
-            name: '自动清分',
-            value: 'settlement'
-        },
-        param: [],
-        rules: {}
-    },
-    {
-        data: {
-            name: '手动清分',
-            value: 'manualSettlement'
-        },
-        param: [
-            account
-        ],
-        rules: {
-            ...account_rule
-        }
     },
     {
         data: {
