@@ -119,7 +119,6 @@ class BlockChainService extends Service {
       app.chainInstance = this.initChain();
     }
     chain = app.chainInstance;
-    // const chain = this.initChain();
 
     const newKey = Chain.utils.generateECKey();
 
@@ -151,13 +150,10 @@ class BlockChainService extends Service {
                     status: false
                   });
                 } else {
-                  console.log(user)
                   let identity = user.data.identity;
                   if (identity === '0x0000000000000000000000000000000000000000000000000000000000000000') {
-                    console.log(identity)
                     identity = this.getHashIdentity(newAccountName)
                   }
-                  // let result = Chain.utils.get
                   resolve({
                     status: true,
                     accountName: newAccountName,
