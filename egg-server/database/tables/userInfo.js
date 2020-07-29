@@ -18,15 +18,11 @@ User.init({
     type: STRING,
   },
   // 账户地址
-  identity: {
+  addr: {
     type: STRING
   },
   // 私钥
-  private_key: {
-    type: STRING
-  },
-  // 公钥
-  public_key: {
+  keyhash: {
     type: STRING
   },
   // 金额

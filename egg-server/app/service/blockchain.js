@@ -37,16 +37,30 @@ class BlockChainService extends Service {
     const accountKey = fs.readFileSync(this.getPath('certs/user.pem'), {
       encoding: 'utf8'
     });
-    const accountPassword = 'Col_*&441fedloh';
+    const accountPassword = 'Kaio663*&^1231';
 
     const keyInfo = Chain.utils.getKeyInfo(accountKey, accountPassword);
 
-    const passphrase = 'fsdDJFO&*(&3fkls33fg';
+    const passphrase = 'realsu.123$%^AQ';
 
     let opt = {
-      host: '106.15.155.192', //目标区块链网络节点的 IP
+      host: '147.103.163.48', //目标区块链网络节点的 IP
       port: 18130, //端口号
       timeout: 30000, //连接超时时间配置
+      clients: [
+        {
+          host: '106.14.168.236',
+          port: 18130
+        },
+        {
+          host: '47.103.163.178',
+          port: 18130
+        },
+        {
+          host: '47.102.11.238',
+          port: 18130
+        }
+      ],
       cert: fs.readFileSync(this.getPath('certs/client.crt'), {
         encoding: 'utf8'
       }),
@@ -222,10 +236,13 @@ class BlockChainService extends Service {
     if (arr[4]) {
       arr[4] = parseInt(arr[4]);
     }
+    // if (!app.chainInstance) {
+    //   app.chainInstance = await this.getChain(data.privateKey, data.publicKey);
+    //   this.setUser(app.chainInstance, data.privateKey, data.publicKey);
+    // }
     if (!app.chainInstance) {
-      app.chainInstance = await this.getChain(data.privateKey, data.publicKey);
+      app.chainInstance = this.initChain();
     }
-    this.setUser(app.chainInstance, data.privateKey, data.publicKey);
     chain = app.chainInstance;
     if (!chain) {
       return {
@@ -273,10 +290,13 @@ class BlockChainService extends Service {
       app
     } = this;
     let chain = null;
+    // if (!app.chainInstance) {
+    //   app.chainInstance = await this.getChain(data.privateKey, data.publicKey);
+    //   this.setUser(app.chainInstance, data.privateKey, data.publicKey);
+    // }
     if (!app.chainInstance) {
-      app.chainInstance = await this.getChain(data.privateKey, data.publicKey);
+      app.chainInstance = this.initChain();
     }
-    this.setUser(app.chainInstance, data.privateKey, data.publicKey);
     chain = app.chainInstance;
     let abi = JSON.parse(data.abi);
     const theContract = chain.ctr.contract(data.contractName, abi);

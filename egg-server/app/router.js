@@ -19,6 +19,8 @@ module.exports = app => {
   router.post('/contract/bytecode/delete', controller.contract.delCntInfo);
   // 部署合约
   router.post('/contract/bytecode/deploy', controller.contract.deployCnt);
+
+  
   // 获取合约部署列表
   router.post('/contract/deploy/list', controller.contract.deployedCntList);
 

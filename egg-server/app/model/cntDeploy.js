@@ -18,10 +18,6 @@ module.exports = app => {
             type: STRING,
             allowNull: false
         },
-        belong: {
-            type: STRING,
-            allowNull: false
-        },
         // 合约类型
         contractType: {
             type: STRING,
@@ -29,11 +25,6 @@ module.exports = app => {
         },
         // 合约地址
         identity: {
-            type: STRING,
-            allowNull: false
-        },
-        // 部署人
-        deployer: {
             type: STRING,
             allowNull: false
         },

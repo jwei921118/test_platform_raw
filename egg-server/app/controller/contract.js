@@ -72,15 +72,14 @@ class ContractController extends Controller {
         let {
             validator
         } = app;
-
         const errors = validator.validate({
             contractName: 'string',
             bytecode: 'string',
             abi: 'string',
-            accountName: 'string',
-            contractType: "string",
-            belong: 'string'
+            contractType: "string"
         }, data);
+
+        console.log(data);
         if (errors) {
             // 验证失败
             ctx.return({

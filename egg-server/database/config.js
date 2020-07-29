@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const sqlConfig = {
     host: '127.0.0.1',
     user: 'root',
-    password: 'Gzcd2015',
+    password: '12345678',
     port: 3306,
     database: 'contract'
 };

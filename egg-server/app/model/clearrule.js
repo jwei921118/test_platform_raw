@@ -1,5 +1,4 @@
-// 用户模块
-
+// 商户合伙人
 module.exports = app => {
     const {
         INTEGER,
@@ -7,34 +6,29 @@ module.exports = app => {
         DATE
     } = app.Sequelize;
 
-    const User = app.model.define('user', {
-        id: {
+    const clearRule = app.model.define('clearRule', {
+        // 合约id
+        contractId: {
             type: INTEGER,
             primaryKey: true,
-            autoIncrement: true
         },
-        // 账户名称
-        accountName: {
+        ruleName: {
             type: STRING,
         },
-        // 账户地址
-        addr: {
+        // 分成规则
+        detail: {
             type: STRING
         },
-        // 私钥
-        keyhash: {
-            type: STRING
-        },
-        balanceof: {
+        // 所属用户id
+        belong: {
             type: INTEGER
         },
         createdAt: DATE,
-        updatedAt: DATE
+        updatedAt: DATE,
     }, {
         freezeTableName: true,
-        tableName: 'user_lists',
+        tableName: 'clear_rule',
         timestamps: false,
     });
-
-    return User;
+    return clearRule;
 }

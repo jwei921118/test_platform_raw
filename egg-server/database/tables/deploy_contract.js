@@ -12,10 +12,6 @@ DeployContract.init({
     type: Sequelize.STRING,
     allowNull: false
   },
-  belong: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
   // 合约类型
   contract_type: {
     type: Sequelize.STRING,
@@ -23,11 +19,6 @@ DeployContract.init({
   },
   // 合约地址
   identity: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  // 部署人
-  deployer: {
     type: Sequelize.STRING,
     allowNull: false
   },

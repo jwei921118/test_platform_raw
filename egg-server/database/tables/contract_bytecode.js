@@ -12,16 +12,10 @@ ContractBytecode.init({
     type: Sequelize.STRING,
     allowNull: false
   },
-  // // 属于哪个项目
-  // belong: {
-  //   type: Sequelize.STRING,
-  //   allowNull: false
-  // },
-  // 合约类型
-  // contract_Type: {
-  //   type: Sequelize.STRING,
-  //   allowNull: false
-  // },
+  contract_Type: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   // 字节码
   bytecode: {
     type: Sequelize.TEXT,

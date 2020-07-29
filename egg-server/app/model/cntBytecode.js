@@ -18,6 +18,10 @@ module.exports = app => {
             type: STRING,
             allowNull: false
         },
+        contractType: {
+            type: STRING,
+            allowNull: false
+        },
         // 字节码
         bytecode: {
             type: TEXT,

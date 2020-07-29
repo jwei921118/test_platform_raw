@@ -27,6 +27,7 @@ class ContractService extends Service {
         } = this;
         // 添加合约字节码信息
         try {
+            console.log(data);
             const result = await ctx.model.CntBytecode.findOrCreate({
                 where: {
                     bytecode: data.bytecode
@@ -120,92 +121,28 @@ class ContractService extends Service {
      */
     async deployCnt(data, cstParam) {
         let {
-            ctx,
             service
         } = this;
 
         let {
-            // 账户名称
-            accountName,
             // 合约名称
             contractName,
             // 合约类型
             contractType,
-            // 所属项目
-            belong,
-            // 合约abi
-            abi,
         } = data;
-        let result = null;
 
-        try {
-            result = await ctx.model.User.findOne({
-                where: {
-                    accountName: accountName
-                }
-            });
-        } catch (error) {
-            return ctx.helper.DB_ERROR;
+        let cntInfo = await service.blockchain.deployContract(param, cstParam);
+        let identity = Chain.utils.getHash(contractName);
+        if (cntInfo.code === 1) {
+            return cntInfo;
         }
-
-        if (result) {
-            let {
-                publicKey,
-                privateKey
-            } = result;
-            let param = {
-                ...data,
-                privateKey,
-                publicKey
-            };
-            const cntInfo = await service.blockchain.deployContract(param, cstParam);
-            let identity = Chain.utils.getHash(contractName);
-            if (cntInfo.code === 1) {
-                return cntInfo;
-            }
-            let tableData = {
-                contractName,
-                contractType,
-                belong,
-                identity,
-                abi,
-                deployer: accountName
-            };
-            console.log(abi);
-            if (contractType === 'pisa') {
-
-                let totalSupply = cstParam ? cstParam.split(',')[2] ? cstParam.split(',')[2] : '' : '';
-                let _costRatio = cstParam ? cstParam.split(',')[3] ? cstParam.split(',')[3] : '' : '';
-                if (!totalSupply) {
-                    return {
-                        code: 1,
-                        message: 'pisa合约参数错误'
-                    }
-                } else {
-                    tableData.totalSupply = Number(totalSupply);
-                }
-                if (_costRatio) {
-                    tableData.costRatio = Number(_costRatio);
-                }
-
-                return this.joinDeployCntToDB(tableData, 'PisaCnt');
-                // 披萨合约
-
-            } else if (contractType === 'sdr') {
-                return this.joinDeployCntToDB(tableData, 'SdrCnt');
-            } else if (contractType === 'confirmOrder') {
-                // 对账合约
-                return this.joinDeployCntToDB(tableData, 'ConfirmCnt');
-            }
-
-        } else {
-            return {
-                code: 1,
-                message: '不存在本条数据'
-            }
-        }
-
-
+        let tableData = {
+            contractName,
+            contractType,
+            identity,
+            txhash: cntInfo.txhash
+        };
+        return this.joinDeployCntToDB(tableData, 'cntDeploy');
     }
 
 

@@ -23,6 +23,9 @@
 				<el-form-item label="ABI" prop="abi">
 					<el-input v-model="form.abi" placeholder="请输入abi"></el-input>
 				</el-form-item>
+				<el-form-item label="合约类型" prop="contractType">
+					<el-input v-model="form.contractType" placeholder="请输入合约类型"></el-input>
+				</el-form-item>
 				<el-form-item label-width="0" class="align-center">
 					<el-button class="wp-120" type="primary" round @click="confirm()">确认</el-button>
 					<el-button class="wp-120" round plain @click="cancle()">取消</el-button>
@@ -40,46 +43,11 @@
 				:rules="deployRules"
 				label-width="100px"
 			>
-				<el-form-item label="所属项目" prop="belong">
-					<el-select
-						class="w-100"
-						v-model="deployForm.belong"
-						@change="changePro"
-						placeholder="请选择合约所属项目"
-					>
-						<el-option
-							v-for="item in belongProject"
-							:key="item.value"
-							:label="item.name"
-							:value="item.value"
-						></el-option>
-					</el-select>
-				</el-form-item>
 				<el-form-item label="合约名称" prop="contractName">
 					<el-input v-model="deployForm.contractName" placeholder="请输入合约名称"></el-input>
 				</el-form-item>
 				<el-form-item label="合约参数">
 					<el-input v-model="deployForm.cstParam" placeholder="合约参数选填,多个参数逗号隔开"></el-input>
-				</el-form-item>
-				<el-form-item label="合约类型" prop="contractType">
-					<el-select class="w-100" v-model="deployForm.contractType" placeholder="请选择合约部署人">
-						<el-option
-							v-for="item in contractTypeArr"
-							:key="item.value"
-							:label="item.name"
-							:value="item.value"
-						></el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="部署人" prop="accountName">
-					<el-select class="w-100" v-model="deployForm.accountName" placeholder="请选择合约部署人">
-						<el-option
-							v-for="item in userOptions"
-							:key="item.value"
-							:label="item.name"
-							:value="item.value"
-						></el-option>
-					</el-select>
 				</el-form-item>
 				<el-form-item label-width="0" class="align-center">
 					<el-button class="wp-120" type="primary" round @click="confirmDeploy()">确认</el-button>
@@ -97,19 +65,14 @@ console.log(project)
 const cntObject = {
 	contractDes: '',
 	bytecode: '',
-	abi: ''
+	abi: '',
+	contractType: ''
 }
 const deployForm = {
 	// 合约名称
 	contractName: '',
 	// 合约参数
 	cstParam: '',
-	// 部署人
-	accountName: '',
-	// 所有者
-	belong: '',
-	// 合约类型
-	contractType: ''
 }
 export default {
 	components: {
@@ -174,11 +137,18 @@ export default {
 				bytecode: [
 					{
 						required: true,
-						message: '合约类型不能为空',
+						message: '合约字节码不能为空',
 						trigger: ['blur', 'change']
 					}
 				],
 				abi: [
+					{
+						required: true,
+						message: '合约abi不能为空',
+						trigger: ['blur', 'change']
+					}
+				],
+				contractType: [
 					{
 						required: true,
 						message: '合约类型不能为空',
@@ -195,28 +165,8 @@ export default {
 						message: '合约名称不能为空',
 						trigger: ['blur', 'change']
 					}
-				],
-				accountName: [
-					{
-						required: true,
-						message: '未选择合约部署人',
-						trigger: 'change'
-					}
-				],
-				belong: [
-					{
-						required: true,
-						message: '未选择所属项目',
-						trigger: 'change'
-					}
 				]
 			},
-			// 用户选项
-			userOptions: [],
-			// 所属项目
-			belongProject: project,
-			// 合约类型数组
-			contractTypeArr: [],
 			// 部署合约数据
 			deployCntData: {}
 		}
@@ -226,21 +176,21 @@ export default {
 		this.getUser()
 	},
 	methods: {
-		// 获取用户信息
-		getUser() {
-			this._services.ajaxGet('userList').then(res => {
-				if (res.code === 0) {
-					let data = res.data
-					this.userOptions = data.map(v => {
-						return {
-							value: v.accountName,
-							name: v.accountName
-						}
-					})
-					console.log(this.userOptions)
-				}
-			})
-		},
+		// // 获取用户信息
+		// getUser() {
+		// 	this._services.ajaxGet('userList').then(res => {
+		// 		if (res.code === 0) {
+		// 			let data = res.data
+		// 			this.userOptions = data.map(v => {
+		// 				return {
+		// 					value: v.accountName,
+		// 					name: v.accountName
+		// 				}
+		// 			})
+		// 			console.log(this.userOptions)
+		// 		}
+		// 	})
+		// },
 		// 获取合约信息
 		getBytecodeInfo() {
 			this._services.ajaxGet('cntBytecodeList').then(res => {
@@ -255,15 +205,6 @@ export default {
 		openDeployLayer(data) {
 			this.deployCntData = data
 			this.$refs.deployLayer.open()
-		},
-		changePro(v) {
-			console.log(v)
-			this.deployForm.contractType = ''
-			this.belongProject.forEach(val => {
-				if (val.value === v) {
-					this.contractTypeArr = val.contractTypeArr
-				}
-			})
 		},
 		// 提交合约信息
 		confirm() {
@@ -316,11 +257,12 @@ export default {
 		confirmDeploy() {
 			this.$refs.deployForm.validate(valid => {
 				if (valid) {
-					const { bytecode, abi } = this.deployCntData
+					const { bytecode, abi , contractType } = this.deployCntData
 					const param = {
 						...this.deployForm,
 						bytecode,
-						abi
+						abi,
+						contractType
 					}
 					this._services
 						.ajaxPost('deployCnt', param, {
