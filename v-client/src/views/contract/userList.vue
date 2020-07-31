@@ -17,6 +17,9 @@
 				<el-form-item label="用户名" prop="accountName">
 					<el-input v-model="form.accountName" placeholder="请输入用户名"></el-input>
 				</el-form-item>
+				<el-form-item label="密码" prop="keyhash">
+					<el-input v-model="form.keyhash" placeholder="请输入密码"></el-input>
+				</el-form-item>
 				<el-form-item label-width="0" class="align-center">
 					<el-button class="wp-120" type="primary" round @click="confirm()">确认</el-button>
 					<el-button class="wp-120" round plain @click="cancle()">取消</el-button>
@@ -29,7 +32,8 @@
 import tableBase from '@/components/base/tableBase.vue'
 import layerBase from '@/components/base/layerBase.vue'
 const userObject = {
-	accountName: ''
+	accountName: '',
+	keyhash: ''
 }
 export default {
 	components: {
@@ -46,16 +50,12 @@ export default {
 					width: '160px'
 				},
 				{
-					key: 'identity',
+					key: 'addr',
 					name: '用户地址'
 				},
 				{
-					key: 'privateKey',
-					name: '私钥'
-				},
-				{
-					key: 'publicKey',
-					name: '公钥'
+					key: 'balanceof',
+					name: '余额'
 				},
 				{
 					key: 'operate',

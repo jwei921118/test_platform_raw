@@ -14,7 +14,6 @@ class ContractController extends Controller {
         } = this;
 
         let data = ctx.request.body;
-
         const result = await service.contract.addBytecode(data);
         ctx.return(result);
     }
@@ -72,14 +71,14 @@ class ContractController extends Controller {
         let {
             validator
         } = app;
+        console.log(data);
         const errors = validator.validate({
             contractName: 'string',
             bytecode: 'string',
             abi: 'string',
             contractType: "string"
         }, data);
-
-        console.log(data);
+        
         if (errors) {
             // 验证失败
             ctx.return({
@@ -148,26 +147,11 @@ class ContractController extends Controller {
         const {
             ctx,
             service,
-            app
+            // app
         } = this;
-        let {
-            validator
-        } = app;
-        let data = ctx.request.body;
-
-        const errors = validator.validate({
-            contractType: 'string',
-        }, data)
-        if (errors) {
-            // 验证失败
-            ctx.return({
-                code: ctx.VALIDATE_ERROR,
-                message: '参数验证失败'
-            })
-        } else {
-            const result = await service.contract.deployedCntList(data);
-            ctx.return(result);
-        }
+        console.log(1111111);
+        const result = await service.contract.deployedCntList();
+        ctx.return(result);
 
     }
 
@@ -194,6 +178,7 @@ class ContractController extends Controller {
             abi: 'string',
             contractType: 'string'
         }, data);
+        console.log(errors);
         if (errors) {
             ctx.return({
                 code: ctx.VALIDATE_ERROR,

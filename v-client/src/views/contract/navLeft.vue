@@ -3,11 +3,8 @@
 		<router-link to="/cnt/bytecode">
 			<i class="el-icon-notebook-1"></i>
 		</router-link>
-		<router-link to="/cnt/pisa">
+		<router-link to="/cnt/execute">
 			<i class="el-icon-s-shop"></i>
-		</router-link>
-		<router-link to="/cnt/parking">
-			<i class="iconfont iconpark"></i>
 		</router-link>
 		<router-link to="/cnt/user">
 			<i class="el-icon-user"></i>

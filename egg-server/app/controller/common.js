@@ -34,6 +34,36 @@ class CommonController extends Controller {
         }
 
     }
+
+    
+    /**
+     *
+     * 设置调用者
+     * @memberof CommonController
+     */
+    async setCaller() {
+        let {
+            ctx,
+            service,
+            app
+        } = this;
+
+        let data = ctx.request.body;
+        const errors = app.validator.validate({
+            accountName: 'string'
+        }, data);
+        if (errors) {
+            // 验证失败
+            ctx.return({
+                code: ctx.VALIDATE_ERROR,
+                message: errors
+            })
+        } else {
+            const result = await service.contract.setContractCaller(data);
+            ctx.return(result);
+        }
+        
+    }
 }
 
 module.exports = CommonController;

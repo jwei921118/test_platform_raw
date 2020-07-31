@@ -1,7 +1,7 @@
 // sdr 测试方法配置
-let identity = {
-    key: 'identity',
-    label: '用户identity',
+let addr = {
+    key: 'addr',
+    label: '用户addr',
     type: 'text'
 }
 let account = {
@@ -9,18 +9,18 @@ let account = {
     label: '金额',
     type: 'number'
 }
-let identity_1 = {
-    key: 'identity_1',
-    label: '用户identity',
+let addr_1 = {
+    key: 'addr_1',
+    label: '用户addr',
     type: 'text'
 }
-let identity_2 = {
-    key: 'identity_2',
-    label: '用户identity',
+let addr_2 = {
+    key: 'addr_2',
+    label: '用户addr',
     type: 'text'
 }
-let identity_rule = {
-    identity: [{
+let addr_rule = {
+    addr: [{
         required: true,
         message: '用户地址必填',
         trigger: ['blur', 'change']
@@ -33,15 +33,15 @@ let account_rule = {
         trigger: 'blur'
     }]
 }
-let identity_1_rule = {
-    identity_1: [{
+let addr_1_rule = {
+    addr_1: [{
         required: true,
         message: '用户地址必填',
         trigger: ['blur', 'change']
     }]
 }
-let identity_2_rule = {
-    identity_2: [{
+let addr_2_rule = {
+    addr_2: [{
         required: true,
         message: '用户地址必填',
         trigger: ['blur', 'change']
@@ -49,28 +49,28 @@ let identity_2_rule = {
 }
 // -----------------// 
 // 一个参数形式1
-let param1 = [identity];
+let param1 = [addr];
 let rules1 = {
-    ...identity_rule
+    ...addr_rule
 }
 // 参数形式2
 let param2 = [
-    identity,
+    addr,
     account
 ];
 let rules2 = {
-    ...identity_rule,
+    ...addr_rule,
     ...account_rule
 }
 // 参数形式3
 let param3 = [
-    identity_1,
-    identity_2,
+    addr_1,
+    addr_2,
     account
 ]
 let rules3 = {
-    ...identity_1_rule,
-    ...identity_2_rule,
+    ...addr_1_rule,
+    ...addr_2_rule,
     ...account_rule
 }
 

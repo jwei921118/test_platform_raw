@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const basePath = '../../';
 const Chain = require('@alipay/mychain/index.node');
-const admin = 'contract_test';
+const admin = 'realsu.wei';
 
 class BlockChainService extends Service {
   /**
@@ -44,7 +44,7 @@ class BlockChainService extends Service {
     const passphrase = 'realsu.123$%^AQ';
 
     let opt = {
-      host: '147.103.163.48', //目标区块链网络节点的 IP
+      host: '47.102.11.238', //目标区块链网络节点的 IP
       port: 18130, //端口号
       timeout: 30000, //连接超时时间配置
       clients: [
@@ -54,10 +54,6 @@ class BlockChainService extends Service {
         },
         {
           host: '47.103.163.178',
-          port: 18130
-        },
-        {
-          host: '47.102.11.238',
           port: 18130
         }
       ],
@@ -218,24 +214,11 @@ class BlockChainService extends Service {
    * 部署合约
    * @memberof BlockChainService
    */
-  async deployContract(data, cntParam) {
+  async deployContract(data, arr) {
     let {
       app
     } = this;
     let chain = null;
-    let arr = [];
-    if (cntParam) {
-      arr = cntParam.split(',');
-    }
-    if (arr[2]) {
-      arr[2] = parseInt(arr[2]);
-    }
-    if (arr[3]) {
-      arr[3] = parseInt(arr[3]);
-    }
-    if (arr[4]) {
-      arr[4] = parseInt(arr[4]);
-    }
     // if (!app.chainInstance) {
     //   app.chainInstance = await this.getChain(data.privateKey, data.publicKey);
     //   this.setUser(app.chainInstance, data.privateKey, data.publicKey);
@@ -244,6 +227,7 @@ class BlockChainService extends Service {
       app.chainInstance = this.initChain();
     }
     chain = app.chainInstance;
+    console.log(chain);
     if (!chain) {
       return {
         code: 1,
@@ -255,7 +239,7 @@ class BlockChainService extends Service {
     return new Promise((resolve, reject) => {
       myContract.new(
         data.bytecode, {
-          from: data.accountName,
+          from: admin,
           parameters: arr
         },
         (err, output, data) => {
@@ -381,6 +365,11 @@ class BlockChainService extends Service {
   // 生成一个唯一的hash
   getHashIdentity(str) {
     return Chain.utils.getHash(str);
+  }
+
+  // 获取admin  
+  getAdmin() {
+    return admin;
   }
 }
 

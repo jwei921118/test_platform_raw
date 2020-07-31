@@ -17,6 +17,10 @@ DeployContract.init({
     type: Sequelize.STRING,
     allowNull: false
   },
+  abi: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
   // 合约地址
   identity: {
     type: Sequelize.STRING,
@@ -26,9 +30,7 @@ DeployContract.init({
   txhash: {
     type: Sequelize.STRING,
     allowNull: false
-  },
-  created_at: Sequelize.DATE,
-  updated_at: Sequelize.DATE,
+  }
 }, {
   sequelize,
   modelName: 'deployContract',

@@ -22,14 +22,10 @@ const routes = [{
         name: '已部署合约',
         component: () => import('../views/contract/deployCnt.vue')
       }, {
-        path: '/cnt/pisa',
-        name: 'pisa合约项目',
-        component: () => import('../views/contract/pisa.vue')
-      }, {
-        path: '/cnt/parking',
-        name: '停车场项目',
-        component: () => import('../views/contract/parking.vue')
-      }, {
+        path: '/cnt/execute',
+        name: '合约调用',
+        component: () => import('../views/contract/execute.vue')
+      },{
         path: '/cnt/user',
         name: '用户管理',
         component: () => import('../views/contract/userList.vue')

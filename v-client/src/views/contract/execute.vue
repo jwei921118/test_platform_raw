@@ -2,15 +2,11 @@
 	<div>
 		<!--  -->
 		<el-row :gutter="20" class="h-100">
-			<el-col :span="8" class="h-100 overflow-y-auto">
-				<div class="title">稳定币合约</div>
-				<tableBase :tableKey="tableKey" :tableData="sdrCntList"></tableBase>
-				<div class="title">PISA商户合约</div>
-				<tableBase :tableKey="tableKey" :tableData="pisaCntList"></tableBase>
-				<div class="title">对账合约</div>
-				<tableBase :tableKey="tableKey" :tableData="confirmCntList"></tableBase>
+			<el-col :span="10" class="h-100 overflow-y-auto">
+				<div class="title">已部署合约列表</div>
+				<tableBase :tableKey="tableKey" :tableData="cntDeployLists"></tableBase>
 			</el-col>
-			<el-col :span="16">
+			<el-col :span="14">
 				<el-tabs
 					class="m-t-20"
 					:class="{'reset-tab': editableTabsValue}"
@@ -39,17 +35,13 @@
 
 <script>
 import tableBase from '@/components/base/tableBase.vue'
-import sdrcontent from '@/components/pisa/sdrcontent.vue'
-import pisacontent from '@/components/pisa/pisacontent.vue'
-import confirmcontent from '@/components/pisa/confirmcontent.vue'
-import { project } from '@/constant/data'
-const contractTypeArr = project[0].contractTypeArr
+import sdrcontent from '@/components/cnt/sdrcontent.vue'
+import clearcontent from '@/components/cnt/clearcontent.vue'
 export default {
 	components: {
 		tableBase,
 		sdrcontent,
-		pisacontent,
-		confirmcontent
+		clearcontent
 	},
 	data() {
 		return {
@@ -62,17 +54,13 @@ export default {
 				{
 					key: 'contractType',
 					name: '合约类型',
-					formatter: row => {
-						return contractTypeArr.filter(v => v.value === row.contractType)[0].name
-					}
+					// formatter: row => {
+					// 	return contractTypeArr.filter(v => v.value === row.contractType)[0].name
+					// }
 				},
 				{
 					key: 'identity',
 					name: '合约地址'
-				},
-				{
-					key: 'deployer',
-					name: '部署人'
 				},
 				{
 					key: 'operation',
@@ -97,12 +85,8 @@ export default {
 					]
 				}
 			],
-			// 稳定币合约
-			sdrCntList: [],
-			// 商户pisa合约
-			pisaCntList: [],
-			// 对账合约
-			confirmCntList: [],
+			// 部署合约
+			cntDeployLists: [],
 			editableTabs: [],
 			editableTabsValue: '',
 			// 合约类型
@@ -114,26 +98,16 @@ export default {
 	},
 	mounted() {
 		this.editableTabsValue = ''
-		this.getCntList('sdr')
-		this.getCntList('pisa')
-		this.getCntList('confirmOrder')
+		this.getCntList();
 	},
 	methods: {
 		// 获取稳定币合约列表
-		getCntList(type) {
+		getCntList() {
 			this._services
-				.ajaxPost('deployedCntList', {
-					contractType: type
-				})
+				.ajaxPost('deployedCntList')
 				.then(res => {
 					if (res.code === 0) {
-						if (type === 'sdr') {
-							this.sdrCntList = res.data
-						} else if (type === 'pisa') {
-							this.pisaCntList = res.data
-						} else if (type === 'confirmOrder') {
-							this.confirmCntList = res.data
-						}
+						this.cntDeployLists = res.data;	
 					}
 				})
 		},
@@ -150,12 +124,8 @@ export default {
 			}
 			this.editableTabsValue = data.contractName
 			this.contractType = data.contractType
-			if (this.contractType === 'sdr') {
-				this.currentTabComponent = sdrcontent
-			} else if (this.contractType === 'pisa') {
-				this.currentTabComponent = pisacontent
-			} else if (this.contractType === 'confirmOrder') {
-				this.currentTabComponent = confirmcontent
+			if (this.contractType === 'sc') {
+				this.currentTabComponent = sdrcontent;
 			}
 			this.cntInfo = Object.assign({}, data)
 		},
@@ -163,12 +133,10 @@ export default {
 			console.log(data)
 			let name = data.name
 			let contractType = this.editableTabs.filter(v => v.name == name)[0].contractType
-			if (contractType === 'sdr') {
+			if (contractType === 'sc') {
 				this.currentTabComponent = sdrcontent
-			} else if (contractType === 'pisa') {
-				this.currentTabComponent = pisacontent
-			} else if (contractType === 'confirmOrder') {
-				this.currentTabComponent = confirmcontent
+			} else if (contractType === 'cc') {
+				this.currentTabComponent = clearcontent
 			}
 			let cntInfo = this.editableTabs.filter(v => v.name == name)[0].cntInfo
 			this.cntInfo = Object.assign({}, cntInfo)

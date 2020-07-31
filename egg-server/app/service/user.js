@@ -2,6 +2,8 @@ const {
     Service
 } = require('egg');
 
+let uuidv1 = require('uuid').v1;
+
 
 class UserService extends Service {
 
@@ -15,38 +17,54 @@ class UserService extends Service {
             ctx,
             service
         } = this;
-
-        const blockchainUser = await service.blockchain.createAccount(data.accountName);
-        // console.log(blockchainUser);
-        if (!blockchainUser.status) {
-            return {
-                code: '7',
-                name: '区块链服务错误'
-            }
+        let addr = uuidv1();
+        let param = {
+            ...data,
+            addr
         }
 
-        try {
-            const result = await ctx.model.User.findOrCreate({
-                where: {
-                    identity: blockchainUser.identity,
-                    accountName: blockchainUser.accountName
-                },
-                defaults: blockchainUser
-            });
+        const usercnt = await ctx.model.CntDeploy.findOne({where: {contractType: 'uc'}});
 
-            let [user, created] = result;
-            let res = {};
-            if (created) {
-                res.code = 0;
-                res.data = user;
-            } else {
-                res.code = ctx.DB_DATA_REPEAT;
-                res.message = '用户已存在';
-            }
-            return res;
-        } catch (error) {
-            return ctx.helper.DB_ERROR;
-        }
+        const chainInstance = await service.blockchain.getContractInstance(usercnt);
+
+        let arr = [addr, data.keyhash,data.accountName];
+        let cntUser = service.blockchain.getAdmin();
+        return new Promise((resolve,reject) => {
+            chainInstance['registerUser'](...arr, {
+                from: cntUser
+                },async (err, output,blockdata) => {
+                    if (err) {
+                        resolve({
+                            code: 1,
+                            message: err
+                        })
+                    } else {
+                        try {
+                            const result = await ctx.model.User.findOrCreate({
+                                where: {
+                                    addr: addr
+                                },
+                                defaults: param
+                            });
+                
+                            let [user, created] = result;
+                            let res = {};
+                            if (created) {
+                                res.code = 0;
+                                res.data = user;
+                            } else {
+                                res.code = ctx.DB_DATA_REPEAT;
+                                res.message = '用户已存在';
+                            }
+                            resolve(res);
+                        } catch (error) {
+                            resolve(ctx.helper.DB_ERROR);
+                        }
+                    }
+            })
+        });
+
+        
 
     }
 
@@ -119,13 +137,12 @@ class UserService extends Service {
             ctx
         } = this;
         let param = {};
-        if (data.identity) {
-            param.identity = data.identity
+        if (data.addr) {
+            param.addr = data.addr
         }
         if (data.accountName) {
             param.accountName = data.accountName;
         }
-
         try {
             const result = await ctx.model.User.findOne({
                 where: param
@@ -133,6 +150,36 @@ class UserService extends Service {
             return {
                 code: 0,
                 data: result.dataValues
+            }
+        } catch (error) {
+            return ctx.helper.DB_ERROR;
+        }
+    }
+
+
+    /**
+     *
+     * 更新用户
+     * @param {*} data
+     * @memberof UserService
+     */
+    async update(data) {
+        console.log(data);
+        let {
+            ctx
+        } = this;
+        try {
+            const result = await ctx.model.User.update({
+                balanceof: data.balanceof
+            }, {
+                where: {
+                    addr: data.addr
+                }
+            });
+            console.log(result);
+            return {
+                code: 0,
+                message: 'success'
             }
         } catch (error) {
             return ctx.helper.DB_ERROR;

@@ -97,6 +97,10 @@ export default {
 					name: 'ABI'
 				},
 				{
+					key: 'contractType',
+					name: '合约类型'
+				},
+				{
 					key: 'operate',
 					name: '操作',
 					ctrlType: 'text',

@@ -11,10 +11,10 @@ const clearRule = require('./tables/clear_rule');
 
 // 生成一个合伙人表
 
-user.sync();
-contractByteCode.sync();
+// user.sync();
+// contractByteCode.sync();
 deployContract.sync();
-clearRule.sync();
+// clearRule.sync();
 
 // merchantPartner.belongsTo(pisaContract, {
 //     foreignKey: 'merchant_id'

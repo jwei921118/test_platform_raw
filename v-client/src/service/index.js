@@ -28,18 +28,8 @@ const URLS = {
     deployCnt: `${urlLoaction}/contract/bytecode/deploy`,
     // 已经部署合约列表
     deployedCntList: `${urlLoaction}/contract/deploy/list`,
-    // sdr 合约列表
-    sdrCntList: `${urlLoaction}/contract/sdrcnt/list`,
     // 执行sdr 合约
     executecnt: `${urlLoaction}/contract/execute`,
-    // pisa 商户合约列表
-    pisaCntList: `${urlLoaction}/contract/pisacnt/list`,
-    // 获取一个产品合伙人
-    proPartnerList: `${urlLoaction}/contract/propartner/list`,
-    // 商户合伙人列表
-    merchantPartnerList: `${urlLoaction}/contract/merchantpartner/list`,
-    // 对账合约列表
-    confirmCntList: `${urlLoaction}/contract/confirmcnt/list`,
     // 删除已经部署合约
     delDeployedCnt: `${urlLoaction}/contract/deploy/delete`
 };

@@ -3,6 +3,7 @@ const {
 } = require('egg');
 
 const Chain = require("@alipay/mychain/index.node");
+const { Promise } = require('sequelize');
 
 /**
  *
@@ -131,7 +132,14 @@ class ContractService extends Service {
             contractType,
         } = data;
 
-        let cntInfo = await service.blockchain.deployContract(param, cstParam);
+        // console.log(contractName);
+        // 合约参数
+        let cntParams = [];
+        if (cstParam) {
+            cntParams = cstParam.split(",");
+        }
+        let cntInfo = await service.blockchain.deployContract(data, cntParams);
+        console.log(cntInfo);
         let identity = Chain.utils.getHash(contractName);
         if (cntInfo.code === 1) {
             return cntInfo;
@@ -139,10 +147,12 @@ class ContractService extends Service {
         let tableData = {
             contractName,
             contractType,
+            abi: data.abi,
             identity,
             txhash: cntInfo.txhash
         };
-        return this.joinDeployCntToDB(tableData, 'cntDeploy');
+        console.log(tableData);
+        return this.joinDeployCntToDB(tableData, 'CntDeploy');
     }
 
 
@@ -224,24 +234,13 @@ class ContractService extends Service {
      * 获取已经部署列表
      * @memberof ContractService
      */
-    async deployedCntList(data) {
+    async deployedCntList() {
         let {
             ctx
         } = this;
         let result = null
         try {
-            if (data.contractType === 'sdr') {
-                result = await ctx.model.SdrCnt.findAll();
-            } else if (data.contractType === 'pisa') {
-                result = await ctx.model.PisaCnt.findAll();
-            } else if (data.contractType === 'confirmOrder') {
-                result = await ctx.model.ConfirmCnt.findAll();
-            } else {
-                return {
-                    code: 1,
-                    message: '参数contractType错误'
-                }
-            }
+            result = await ctx.model.CntDeploy.findAll();
             return {
                 code: 0,
                 data: result
@@ -295,67 +294,45 @@ class ContractService extends Service {
         } = this;
 
         let {
-            accountName,
             methodName,
         } = data;
 
-        let userInfo = null;
-        // 获取用户公私钥
-        try {
-            userInfo = await ctx.model.User.findOne({
-                where: {
-                    accountName
-                }
-            });
-        } catch (error) {
-            return ctx.helper.DB_ERROR;
-        }
-        // 获取合约信息
-
-        if (userInfo) {
-            const param = {
-                ...data,
-                privateKey: userInfo.privateKey,
-                publicKey: userInfo.publicKey
-            };
-            const chainInstance = await service.blockchain.getContractInstance(param);
-            if (param) {
-                const a = Object.values(param.param);
-                console.log(methodName, accountName, a);
-                return new Promise((resolve, reject) => {
-                    chainInstance[methodName](...a, {
-                        from: accountName
-                    }, (err, output, data) => {
-                        if (err) {
-                            resolve({
-                                code: 1,
-                                message: err
-                            })
-                        } else {
-                            this.pipelineFn(param, output);
-                            resolve({
-                                code: 0,
-                                data: {
-                                    output: output,
-                                    info: {
-                                        block_number: data.block_number,
-                                        return_code: data.return_code,
-                                        txhash: data.txhash,
-                                        gas_used: data.receipt.gas_used
-                                    }
-                                },
-                            })
-                        }
-                    });
+        const result = await this.setContractCaller(data);
+        let cntUser = service.blockchain.getAdmin();
+        if (result.code === 0 ) {
+            const chainInstance = await service.blockchain.getContractInstance(data);
+            let arr = Object.values(data.param);
+            console.log(arr);
+            return new Promise((resolve, reject) => {
+                chainInstance[methodName](...arr, {
+                    from: cntUser
+                }, (err, output, blockdata) => {
+                    console.log(err)
+                    console.log(blockdata);
+                    if (err) {
+                        resolve({
+                            code: 1, 
+                            message: err
+                        });
+                    } else {
+                        this.pipelineFn(data, output);
+                        resolve({
+                            code: 0,
+                            data: {
+                                output: output,
+                                info: {
+                                    block_number: blockdata.block_number,
+                                    return_code: blockdata.return_code,
+                                    txhash: blockdata.txhash,
+                                    gas_used: blockdata.receipt.gas_used
+                                }
+                            },
+                        })
+                    }
                 })
-
-            }
-
+            });
         } else {
-            return {
-                code: 1,
-                message: '调用者错误'
-            }
+            return result;
         }
 
     }
@@ -373,81 +350,20 @@ class ContractService extends Service {
             service
         } = this;
         let {
-            methodName,
-            contractName
+            methodName
         } = data;
-        if (data.contractType === 'sdr') {
+        if (data.contractType === 'sc') {
             // sdr合约
             if (methodName === 'mintAvailable') {
-                let param = await this.getPartnerParam(data);
-                let partner = await this.checkSdrProPartner(param);
-                service.propartner.createOrUpdate(param, partner, true);
+                let o = {
+                    addr: data.param.addr,
+                    balanceof: data.param.account
+                }
+                service.user.update(o);
             }
-        } else if (data.contractType === 'pisa') {
-            // pisa 合约
-            if (methodName === 'addPartner') {
-                let param = await this.getPartnerParam(data);
-                let partner = await this.checkMechantPartner(param);
-                service.merchantpartner.createOrUpdate(param, partner, true);
-            } else if (methodName === 'transfer') {
-
-                let data1 = {
-                    ...data
-                }
-                data1.param = {
-                    ...data.param
-                }
-                data1.param.identity = data.param.identity_1;
-                let param1 = await this.getPartnerParam(data1);
-                // console.log(param1);
-                let partner1 = await this.checkMechantPartner(param1);
-                // console.log(partner1);
-                service.merchantpartner.createOrUpdate(param1, partner1, false);
-
-                let data2 = {
-                    ...data
-                }
-                data2.param = {
-                    ...data.param
-                }
-                data2.param.identity = data.param.identity_2;
-                // console.log(1111111111111111111111, data1);
-                // console.log(2222222222222222222222, data2);
-
-                let param2 = await this.getPartnerParam(data2);
-                let partner2 = await this.checkMechantPartner(param2);
-                // console.log(partner1);
-                service.merchantpartner.createOrUpdate(param2, partner2, true);
-            } else if (methodName === 'clearBycostRatio') {
-                // 清分
-                let partners = Object.values(JSON.parse(output));
-                let pisacntInfo = await this.findOnePisaCnt({
-                    contractName
-                });
-
-                if (pisacntInfo.code !== 0) {
-                    return;
-                }
-
-                let projectId = pisacntInfo.data.pisaId;
-                for (let i = 0; i < partners.length; i++) {
-                    let identity = ctx.helper.int2hex(String(partners[i].k));
-                    let o = {
-                        ...data,
-                        id: projectId
-                    };
-                    o.contractType = 'sdr';
-                    o.param.identity = identity;
-                    o.param.account = Number(partners[i].v);
-
-                    let param = await this.getPartnerParam(o);
-                    let partner = await this.checkSdrProPartner(param);
-                    service.propartner.createOrUpdate(param, partner, true);
-                }
-
-            }
-        } else if (data.contractType === 'confirmOrder') {
-            console.log('confirmOrder');
+        } else if (data.contractType === 'cc') {
+            
+        } else if (data.contractType === 'ac') {
         }
     }
 
@@ -593,6 +509,53 @@ class ContractService extends Service {
 
     }
 
+    /**
+     *
+     * 生成参数
+     * @param {*} data
+     * @memberof ContractService
+     */
+    async setContractCaller(data) {
+        let { ctx,service } = this;
+        let { accountName } = data;
+        let userInfo = null;
+        // 获取用户公私钥
+        try {
+            userInfo = await ctx.model.User.findOne({
+                where: {
+                    accountName
+                }
+            });
+        } catch (error) {
+            return ctx.helper.DB_ERROR;
+        }
+
+        let param = await ctx.model.CntDeploy.findOne({where: {contractType: 'uc'}});
+
+        const chainInstance = await service.blockchain.getContractInstance(param);
+
+        let cntParam = Object.values({
+            addr: userInfo.addr,
+            keyhash: userInfo.keyhash
+        });
+
+        console.log(cntParam);
+
+        let admin = service.blockchain.getAdmin();
+        return new Promise((resolve, reject) => {
+            chainInstance['setSender'](...cntParam, {
+                    from: admin 
+                }, (err, output, data) => {
+                    if (err) {
+                        resolve({code: 1, message: 'setCaller failed'});
+                    } else {
+                        resolve({code: 0 , message: 'success'})
+                    }
+            })
+        });
+        // const chainInstance = await service.blockchain.getContractInstance(data);
+        
+    }
 
 
 }

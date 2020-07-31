@@ -44,4 +44,7 @@ module.exports = app => {
 
   // 数据上链
   router.post('/contract/dataonchain', controller.common.dataOnChain);
+
+  // 设置调用者
+  router.post('/contract/setCaller',controller.common.setCaller);
 };

@@ -1,6 +1,6 @@
 <template>
 	<el-row :gutter="20" class="h-100">
-		<el-col :span="6" class="h-100 overflow-y-auto border-r">
+		<el-col :span="12" class="h-100 overflow-y-auto border-r">
 			<div>
 				<label class="m-r-10">请选择合约调用者</label>
 				<el-select
@@ -28,12 +28,12 @@
 				></apiItem>
 			</div>
 		</el-col>
-		<el-col :span="8" class="border-r h-100">
+		<el-col :span="12" class="border-r h-100">
 			<outputCtx ref="outputCtx"></outputCtx>
 		</el-col>
-		<el-col :span="10" class="h-100 overflow-y-auto">
+		<!-- <el-col :span="10" class="h-100 overflow-y-auto">
 			<tableBase :tableKey="proPartnerKey" :tableData="proPartnerData"></tableBase>
-		</el-col>
+		</el-col> -->
 	</el-row>
 </template>
 <script>
@@ -45,7 +45,7 @@ export default {
 	components: {
 		apiItem,
 		outputCtx,
-		tableBase
+		// tableBase
 	},
 	data() {
 		return {
@@ -87,7 +87,6 @@ export default {
 	},
 	mounted() {
 		this.getUser()
-		this.getProPartner()
 	},
 	methods: {
 		// 获取用户信息
@@ -104,20 +103,7 @@ export default {
 				}
 			})
 		},
-		// 获取sdr合伙人信息
-		getProPartner() {
-			this._services
-				.ajaxPost('proPartnerList', {
-					projectId: this.cntInfo.id
-				})
-				.then(res => {
-					if (res.code === 0) {
-						this.proPartnerData = res.data
-					} else {
-						this.tools.message('请选择调用者')
-					}
-				})
-		},
+		
 		selectCaller(v) {
 			this.caller = v
 		},
@@ -145,7 +131,6 @@ export default {
 					data = res.message
 				}
 				this.$refs.outputCtx.input(data, res.code)
-				this.getProPartner()
 			})
 		}
 	}

@@ -4,7 +4,7 @@ module.exports = app => {
     const {
         INTEGER,
         STRING,
-        DATE
+        TEXT
     } = app.Sequelize;
 
     const cntDeploy = app.model.define('cntDeploy', {
@@ -23,6 +23,10 @@ module.exports = app => {
             type: STRING,
             allowNull: false
         },
+        abi: {
+            type: TEXT,
+            allowNull: false
+          },
         // 合约地址
         identity: {
             type: STRING,
@@ -32,9 +36,7 @@ module.exports = app => {
         txhash: {
             type: STRING,
             allowNull: false
-        },
-        createdAt: DATE,
-        updatedAt: DATE
+        }
     }, {
         freezeTableName: true,
         tableName: 'deploy_contract',
